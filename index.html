@@ -2648,6 +2648,16 @@
         });
     }
 
+    function getErrorMessage(res, defaultMsg) {
+      if (!res) return defaultMsg || "Terjadi kesalahan koneksi";
+      if (res.message) return String(res.message);
+      if (res.error) {
+        if (typeof res.error === 'string') return res.error;
+        if (res.error.message) return String(res.error.message);
+      }
+      return defaultMsg || "Gagal memproses permintaan";
+    }
+
     function callBackendPost(payload, callback) {
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         if (payload.action === "verifyLogin") {
@@ -2672,14 +2682,14 @@
         return;
       }
 
-      // Rute Fast-GET untuk verifikasi login dan simpan banner agar respon instan < 300ms
-      if (payload && (payload.action === "verifyLogin" || payload.action === "saveBannerConfig")) {
+      // Rute Fast-GET untuk seluruh operasi CRUD agar respon instan < 300ms tanpa CORS & 302 drop
+      var fastActions = ["verifyLogin", "saveBannerConfig", "saveProduct", "updateOrderStatus", "deleteProduct", "saveOrder"];
+      if (payload && fastActions.indexOf(payload.action) !== -1) {
         var params = {};
-        if (payload.action === "verifyLogin") {
-          params.password = payload.password;
-        } else if (payload.action === "saveBannerConfig") {
-          params.bannerConfig = JSON.stringify(payload.bannerConfig || {});
-          params.password = payload.password;
+        for (var k in payload) {
+          if (k !== "action") {
+            params[k] = (typeof payload[k] === 'object' && payload[k] !== null) ? JSON.stringify(payload[k]) : payload[k];
+          }
         }
         callBackendGet(payload.action, params, callback);
         return;
@@ -2693,7 +2703,7 @@
         .then(function (data) { callback(data); })
         .catch(function (err) {
           console.error("API POST Error:", err);
-          callback({ success: false, error: err });
+          callback({ success: false, error: err, message: (err && err.message) ? err.message : "Koneksi ke server gagal" });
         });
     }
 
@@ -3248,10 +3258,10 @@
       var btnSubmit = document.querySelector('#loginModal button[type="submit"]');
       if (btnSubmit) {
         btnSubmit.disabled = true;
-        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memverifikasi...';
+        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sedang login...';
       }
 
-      showToast("Memverifikasi login dengan database...");
+      showToast("Sedang login...");
 
       // Verifikasi login murni langsung ke backend database server
       callBackendGet("verifyLogin", { password: pass }, function (res) {
@@ -3268,7 +3278,8 @@
           loadOrdersAdmin();
           switchView('admin');
         } else {
-          alert(res && res.message ? res.message : "Password salah!");
+          var errMsg = getErrorMessage(res, "Password admin salah!");
+          alert("❌ " + errMsg);
         }
       });
     }
@@ -3549,11 +3560,12 @@
         password: adminToken
       }, function (res) {
         if (res && res.success) {
-          showToast(res.message);
+          showToast(res.message || "Status pesanan diperbarui");
           loadProducts();
           loadOrdersAdmin();
         } else {
-          alert(res ? res.message : "Gagal mengupdate status");
+          var errMsg = getErrorMessage(res, "Gagal mengupdate status pesanan");
+          showToast("⚠️ " + errMsg);
         }
       });
     }
@@ -3755,6 +3767,12 @@
     }
 
     function toggleProductBestSeller(prodId) {
+      if (!adminToken) {
+        showToast("⚠️ Silakan login Admin terlebih dahulu!");
+        openModal('loginModal');
+        return;
+      }
+
       var p = allProducts.find(function (item) { return String(item.id) === String(prodId); });
       if (!p) return;
 
@@ -3787,7 +3805,8 @@
         if (res && res.success) {
           showToast(p.nama + (newBestState ? " aktif sebagai Best Seller 🔥" : " Best Seller dinonaktifkan"));
         } else {
-          alert(res ? res.message : "Gagal menyimpan status ke server");
+          var errMsg = getErrorMessage(res, "Gagal menyimpan status Best Seller");
+          showToast("⚠️ " + errMsg);
         }
       });
     }
@@ -3821,6 +3840,12 @@
     }
 
     function saveDirectStock(prodId, newStockVal) {
+      if (!adminToken) {
+        showToast("⚠️ Silakan login Admin terlebih dahulu!");
+        openModal('loginModal');
+        return;
+      }
+
       var p = allProducts.find(function (item) { return item.id === prodId; });
       if (!p) return;
 
@@ -3842,7 +3867,8 @@
           try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
           loadProducts(true);
         } else {
-          alert(res ? res.message : "Gagal update stok");
+          var errMsg = getErrorMessage(res, "Gagal update stok");
+          showToast("⚠️ " + errMsg);
         }
       });
     }
@@ -3887,6 +3913,12 @@
     }
 
     function submitProductForm() {
+      if (!adminToken) {
+        showToast("⚠️ Silakan login Admin terlebih dahulu!");
+        openModal('loginModal');
+        return;
+      }
+
       var id = document.getElementById('prodEditId').value;
       var nama = document.getElementById('prodName').value.trim();
       var kategori = document.getElementById('prodCategory').value.trim();
@@ -3934,12 +3966,19 @@
           try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
           loadProducts(true);
         } else {
-          alert(res ? res.message : "Gagal menyimpan produk");
+          var errMsg = getErrorMessage(res, "Gagal menyimpan produk");
+          showToast("⚠️ " + errMsg);
         }
       });
     }
 
     function deleteProductPrompt(prodId, prodName) {
+      if (!adminToken) {
+        showToast("⚠️ Silakan login Admin terlebih dahulu!");
+        openModal('loginModal');
+        return;
+      }
+
       if (!confirm("Yakin ingin menghapus produk \"" + prodName + "\"?")) return;
 
       callBackendPost({
@@ -3952,7 +3991,8 @@
           try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
           loadProducts(true);
         } else {
-          alert(res ? res.message : "Gagal menghapus produk");
+          var errMsg = getErrorMessage(res, "Gagal menghapus produk");
+          showToast("⚠️ " + errMsg);
         }
       });
     }
@@ -4380,7 +4420,8 @@
           document.getElementById('confirmPasswordInput').value = "";
           alert("✅ " + (res.message || "Password admin berhasil diperbarui!"));
         } else {
-          alert("❌ " + (res ? res.message : "Gagal mengganti password"));
+          var errMsg = getErrorMessage(res, "Gagal mengganti password");
+          alert("❌ " + errMsg);
         }
       });
     }
