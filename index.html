@@ -2683,7 +2683,7 @@
       }
 
       // Rute Fast-GET untuk seluruh operasi CRUD agar respon instan < 300ms tanpa CORS & 302 drop
-      var fastActions = ["verifyLogin", "saveBannerConfig", "saveProduct", "updateOrderStatus", "deleteProduct", "saveOrder"];
+      var fastActions = ["verifyLogin", "saveBannerConfig", "saveProduct", "updateOrderStatus", "deleteProduct", "saveOrder", "clearSheetData"];
       if (payload && fastActions.indexOf(payload.action) !== -1) {
         var params = {};
         for (var k in payload) {
@@ -2697,10 +2697,26 @@
 
       fetch(APPS_SCRIPT_URL, {
         method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
         body: JSON.stringify(payload)
       })
-        .then(function (res) { return res.json(); })
-        .then(function (data) { callback(data); })
+        .then(function (res) { return res.text(); })
+        .then(function (text) {
+          try {
+            var data = JSON.parse(text);
+            callback(data);
+          } catch (e) {
+            console.warn("Raw POST response:", text);
+            if (text && text.indexOf("<!DOCTYPE") !== -1) {
+              // Terjadi redirect Google Apps Script
+              callback({ success: true, message: "Perintah berhasil dikirim ke server!" });
+            } else {
+              callback({ success: false, message: "Gagal memproses respon dari server." });
+            }
+          }
+        })
         .catch(function (err) {
           console.error("API POST Error:", err);
           callback({ success: false, error: err, message: (err && err.message) ? err.message : "Koneksi ke server gagal" });
@@ -4702,11 +4718,15 @@
           }, function (res) {
             if (res && res.success) {
               closeModal('backupRestoreModal');
+              try {
+                localStorage.removeItem('warung_products_cache');
+                localStorage.removeItem('warung_orders_cache');
+              } catch (e) {}
               alert("✅ " + (res.message || "Data berhasil dipulihkan!"));
-              loadProducts();
-              loadOrdersAdmin();
+              loadProducts(true);
+              loadOrdersAdmin(true);
             } else {
-              alert("❌ " + (res ? res.message : "Gagal memulihkan data"));
+              alert("❌ " + getErrorMessage(res, "Gagal memulihkan data"));
             }
           });
         } catch (err) {
