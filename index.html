@@ -553,6 +553,43 @@
       color: var(--white);
     }
 
+    /* BADGE BEST SELLER (PEMBELI & ADMIN) */
+    .best-seller-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      z-index: 5;
+    }
+
+    .stock-card.best-seller-card {
+      border: 2px solid #f59e0b !important;
+      background: #fffdf5 !important;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15) !important;
+    }
+
+    .badge-best-seller-admin {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      color: #b45309;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #f59e0b;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .product-body {
       padding: 12px 14px 14px;
       display: flex;
@@ -2126,9 +2163,18 @@
             <label>Status</label>
             <select id="prodStatus">
               <option value="Tersedia">Tersedia</option>
+              <option value="Best Seller">🔥 Best Seller (Terlaris)</option>
               <option value="Habis">Habis</option>
             </select>
           </div>
+        </div>
+
+        <!-- TOGGLE BEST SELLER PRIORITAS -->
+        <div class="form-group" style="margin-top: 2px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: #b45309; background: #fef3c7; padding: 8px 12px; border-radius: 8px; border: 1px solid #fde68a;">
+            <input type="checkbox" id="prodIsBestSeller" style="width: 16px; height: 16px; accent-color: #f59e0b;">
+            <span>🔥 Jadikan Produk Best Seller (Tampil Paling Atas)</span>
+          </label>
         </div>
 
         <div class="form-group">
@@ -2520,9 +2566,9 @@
     // LOGIKA PRODUK & KATALOG (SUPER CEPAT DENGAN INSTANT CACHE & SYNC LATAR BELAKANG)
     // ============================================================
     var INITIAL_PRODUCTS_DATA = [
-      { id: "P-003", nama: "Gula rosebrand", kategori: "Gula", harga: 17500, hargaModal: 16000, stok: 40, status: "Tersedia", gambar: "https://titanproduct.s3-ap-southeast-1.amazonaws.com/watermarkimg/8993093665497.jpg", deskripsi: "Gula premium" },
-      { id: "P-002", nama: "Minyak sunco", kategori: "Minyak", harga: 42000, hargaModal: 38000, stok: 37, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHnxpViAsepTSB22YtumorXqwLA8VgeSLfWdjTDhJCzoT6JkmDIBJNJDU&s=10", deskripsi: "Minyak berkualitas" },
-      { id: "P-003-kecapbango95", nama: "Kecap Bango 950 ml", kategori: "Sembako", harga: 25000, hargaModal: 19000, stok: 4, status: "Tersedia", gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/101/MTA-181588322/bango_bango_950g_kecap_manis_950_gram_full01_1a212e65.jpg", deskripsi: "Kecap manis" },
+      { id: "P-002", nama: "Minyak sunco", kategori: "Minyak", harga: 42000, hargaModal: 38000, stok: 37, status: "Best Seller", isBestSeller: true, gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHnxpViAsepTSB22YtumorXqwLA8VgeSLfWdjTDhJCzoT6JkmDIBJNJDU&s=10", deskripsi: "Minyak berkualitas" },
+      { id: "P-003", nama: "Gula rosebrand", kategori: "Gula", harga: 17500, hargaModal: 16000, stok: 40, status: "Best Seller", isBestSeller: true, gambar: "https://titanproduct.s3-ap-southeast-1.amazonaws.com/watermarkimg/8993093665497.jpg", deskripsi: "Gula premium" },
+      { id: "P-003-kecapbango95", nama: "Kecap Bango 950 ml", kategori: "Sembako", harga: 25000, hargaModal: 19000, stok: 4, status: "Best Seller", isBestSeller: true, gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/101/MTA-181588322/bango_bango_950g_kecap_manis_950_gram_full01_1a212e65.jpg", deskripsi: "Kecap manis" },
       { id: "P-004", nama: "Mama lemon 950", kategori: "Sabun cuci piring", harga: 12000, hargaModal: 10000, stok: 5, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/id-11134207-8224t-mi3gxe9f2ebmb1", deskripsi: "" },
       { id: "P-005", nama: "Pepsodent", kategori: "Pasta gigi", harga: 21000, hargaModal: 19000, stok: 6, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXm4Pa7q04yUrEylJ5JwfMy4Di9NGLk8K9HBulXw7jP5FBKuhVUbllrGw&s=10", deskripsi: "" },
       { id: "P-006-sabunnuvo8", nama: "Sabun nuvo 800ml", kategori: "Sabun cair", harga: 22000, hargaModal: 19000, stok: 2, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOgvhnsE4fJlvmci7DY3ZxfFqx8WE_riw-zNx2wHd-Q3DUANatKn2B4E&s=10", deskripsi: "" },
@@ -2605,6 +2651,38 @@
       });
     }
 
+    // ============================================================
+    // HELPER BEST SELLER & REKAP PENJUALAN PRODUK
+    // ============================================================
+    function getProductSalesStats() {
+      var salesMap = {};
+      if (allOrders && allOrders.length) {
+        allOrders.forEach(function (o) {
+          if (o.status !== 'Ditolak' && o.items && o.items.length) {
+            o.items.forEach(function (it) {
+              var pid = it.id;
+              if (!pid && it.nama) {
+                var found = allProducts.find(function(p) { return p.nama && p.nama.toLowerCase() === it.nama.toLowerCase(); });
+                if (found) pid = found.id;
+              }
+              if (pid) {
+                salesMap[pid] = (salesMap[pid] || 0) + (Number(it.qty) || 1);
+              }
+            });
+          }
+        });
+      }
+      return salesMap;
+    }
+
+    function isProductBestSeller(p, salesStats) {
+      if (!p) return false;
+      var stats = salesStats || getProductSalesStats();
+      if (p.isBestSeller === true || p.isBestSeller === 'true' || p.status === 'Best Seller') return true;
+      if (stats[p.id] && stats[p.id] > 0) return true;
+      return false;
+    }
+
     function renderProducts(products) {
       var rawProducts = products || [];
       var seenIds = {};
@@ -2619,11 +2697,13 @@
         seenIds[cleanId] = true;
 
         var validStok = Math.max(0, Number(p.stok) || 0);
+        var isBest = (p.isBestSeller === true || p.isBestSeller === 'true' || p.status === 'Best Seller');
         return Object.assign({}, p, {
           id: cleanId,
           stok: validStok,
           harga: Number(p.harga) || 0,
           hargaModal: Number(p.hargaModal) || 0,
+          isBestSeller: isBest,
           status: validStok > 0 ? (p.status || "Tersedia") : "Habis"
         });
       });
@@ -2707,10 +2787,31 @@
         return;
       }
 
+      // 🔥 URUTKAN PRODUK: Best Seller tampil di paling atas!
+      var salesStats = getProductSalesStats();
+      filtered.sort(function (a, b) {
+        var aIsBest = isProductBestSeller(a, salesStats);
+        var bIsBest = isProductBestSeller(b, salesStats);
+        var aSales = (salesStats[a.id] || 0);
+        var bSales = (salesStats[b.id] || 0);
+
+        var aScore = (a.isBestSeller === true || a.isBestSeller === 'true' || a.status === 'Best Seller' ? 1000 : 0) + aSales;
+        var bScore = (b.isBestSeller === true || b.isBestSeller === 'true' || b.status === 'Best Seller' ? 1000 : 0) + bSales;
+
+        // Stok habis diletakkan di paling bawah
+        var aOut = (a.stok <= 0 || a.status === "Habis");
+        var bOut = (b.stok <= 0 || b.status === "Habis");
+        if (aOut !== bOut) return aOut ? 1 : -1;
+
+        if (aScore !== bScore) return bScore - aScore;
+        return 0;
+      });
+
       // Tampilan Pembeli (HANYA menampilkan Harga Jual)
       container.innerHTML = filtered.map(function (p) {
         var inCart = cart[p.id];
         var isOutOfStock = p.stok <= 0 || p.status === "Habis";
+        var isBest = isProductBestSeller(p, salesStats);
 
         // Validasi ketat jika stok berubah
         if (inCart) {
@@ -2723,6 +2824,7 @@
         }
 
         var qty = inCart ? Math.min(inCart.qty, p.stok) : 0;
+        var bestTagHtml = isBest ? `<span class="best-seller-tag"><i class="fa-solid fa-fire"></i> Best Seller</span>` : '';
 
         return `
           <div class="product-card" id="card-` + p.id + `">
@@ -2732,6 +2834,7 @@
               <span class="stock-badge ` + (isOutOfStock ? 'empty' : 'available') + `">
                 ` + (isOutOfStock ? 'Habis' : 'Stok: ' + p.stok) + `
               </span>
+              ` + bestTagHtml + `
             </div>
             <div class="product-body">
               <h3 class="product-name">` + p.nama + `</h3>
@@ -3306,7 +3409,7 @@
     }
 
     // ============================================================
-    // ADMIN: MANAJEMEN STOK, MODAL & UNTUNG
+    // ADMIN: MANAJEMEN STOK, MODAL & UNTUNG (DENGAN STATUS BEST SELLER PALING ATAS)
     // ============================================================
     function renderAdminStock() {
       var container = document.getElementById('adminStockList');
@@ -3341,18 +3444,48 @@
 
       updateAdminStats(totalStockCount, totalCapitalAmount, totalProfitAmount);
 
-      container.innerHTML = allProducts.map(function (p) {
+      var salesStats = getProductSalesStats();
+
+      // 🔥 URUTKAN PRODUK ADMIN: Best Seller & Penjualan Tertinggi Tampil Paling Atas!
+      var sortedAdminProducts = allProducts.slice().sort(function(a, b) {
+        var aIsBest = isProductBestSeller(a, salesStats);
+        var bIsBest = isProductBestSeller(b, salesStats);
+        var aSales = (salesStats[a.id] || 0);
+        var bSales = (salesStats[b.id] || 0);
+
+        var aScore = (a.isBestSeller === true || a.isBestSeller === 'true' || a.status === 'Best Seller' ? 1000 : 0) + aSales;
+        var bScore = (b.isBestSeller === true || b.isBestSeller === 'true' || b.status === 'Best Seller' ? 1000 : 0) + bSales;
+
+        // Stok habis diletakkan di paling bawah
+        var aOut = (a.stok <= 0 || a.status === "Habis");
+        var bOut = (b.stok <= 0 || b.status === "Habis");
+        if (aOut !== bOut) return aOut ? 1 : -1;
+
+        if (aScore !== bScore) return bScore - aScore;
+        return 0;
+      });
+
+      container.innerHTML = sortedAdminProducts.map(function (p) {
         var jual = Number(p.harga) || 0;
         var modal = Number(p.hargaModal) || 0;
         var untung = jual - modal;
         var percent = modal > 0 ? Math.round((untung / modal) * 100) : 0;
+        var isBest = isProductBestSeller(p, salesStats);
+        var soldCount = salesStats[p.id] || 0;
+        var bestBadgeHtml = isBest 
+          ? `<span class="badge-best-seller-admin"><i class="fa-solid fa-fire"></i> Best Seller ${soldCount > 0 ? '(' + soldCount + ' Terjual)' : ''}</span>`
+          : '';
+        var cardClass = isBest ? 'stock-card best-seller-card' : 'stock-card';
 
         return `
-          <div class="stock-card" id="stock-row-${p.id}">
+          <div class="${cardClass}" id="stock-row-${p.id}">
             <div class="stock-info">
               <img src="${p.gambar}" class="stock-thumb" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80'">
               <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--dark);">${p.nama}</div>
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px;">
+                  <div style="font-weight: 800; font-size: 14px; color: var(--dark);">${p.nama}</div>
+                  ${bestBadgeHtml}
+                </div>
                 <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 4px;">Kategori: <b>${p.kategori}</b></div>
                 <div class="stock-prices-breakdown">
                   <span>Harga Jual: <b style="color: var(--dark);">Rp ${formatRupiah(jual)}</b></span>
@@ -3365,6 +3498,10 @@
             </div>
 
             <div class="stock-controls">
+              <button type="button" class="btn-act ${isBest ? 'btn-act-done' : 'btn-act-edit'}" onclick="toggleProductBestSeller('${p.id}')" title="Klik untuk mengaktifkan / menonaktifkan status Best Seller" style="font-size: 11px; padding: 5px 8px;">
+                <i class="fa-solid fa-fire"></i> ${isBest ? 'Best Seller: ON' : 'Best Seller: OFF'}
+              </button>
+
               <button type="button" class="qty-btn" onclick="quickAdjustStock('${p.id}', -1)" title="Kurangi Stok">-</button>
               <input type="number" class="stock-input" id="stockInput-${p.id}" value="${p.stok}" onchange="saveDirectStock('${p.id}', this.value)" title="Ketik stok langsung">
               <button type="button" class="qty-btn" onclick="quickAdjustStock('${p.id}', 1)" title="Tambah Stok">+</button>
@@ -3379,6 +3516,37 @@
           </div>
         `;
       }).join('');
+    }
+
+    function toggleProductBestSeller(prodId) {
+      var p = allProducts.find(function (item) { return item.id === prodId; });
+      if (!p) return;
+
+      var currentlyBest = isProductBestSeller(p);
+      var newBestState = !currentlyBest;
+
+      p.isBestSeller = newBestState;
+      if (newBestState) {
+        if (p.stok > 0) p.status = "Best Seller";
+      } else {
+        if (p.status === "Best Seller") p.status = "Tersedia";
+      }
+
+      showToast("Mengubah status " + p.nama + " -> " + (newBestState ? "🔥 BEST SELLER" : "Biasa") + "...");
+
+      callBackendPost({
+        action: "saveProduct",
+        product: p,
+        password: adminToken
+      }, function (res) {
+        if (res && res.success) {
+          showToast(p.nama + (newBestState ? " aktif sebagai Best Seller 🔥" : " Best Seller dinonaktifkan"));
+          try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
+          loadProducts(true);
+        } else {
+          alert(res ? res.message : "Gagal mengubah status Best Seller");
+        }
+      });
     }
 
     function updateAdminStats(stock, capital, profit) {
@@ -3401,7 +3569,7 @@
 
       var stockNum = Math.max(0, Number(newStockVal) || 0);
       p.stok = stockNum;
-      p.status = stockNum > 0 ? "Tersedia" : "Habis";
+      p.status = stockNum > 0 ? (p.status === "Best Seller" ? "Best Seller" : "Tersedia") : "Habis";
 
       showToast("Memperbarui stok " + p.nama + " -> " + stockNum + "...");
 
@@ -3412,7 +3580,8 @@
       }, function (res) {
         if (res && res.success) {
           showToast("Stok " + p.nama + " berhasil diupdate: " + stockNum);
-          loadProducts();
+          try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
+          loadProducts(true);
         } else {
           alert(res ? res.message : "Gagal update stok");
         }
@@ -3428,6 +3597,8 @@
       document.getElementById('prodPrice').value = "";
       document.getElementById('prodStock').value = "10";
       document.getElementById('prodStatus').value = "Tersedia";
+      var checkBest = document.getElementById('prodIsBestSeller');
+      if (checkBest) checkBest.checked = false;
       document.getElementById('prodImage').value = "";
       document.getElementById('prodDesc').value = "";
       calculateLiveProfit();
@@ -3438,6 +3609,8 @@
       var p = allProducts.find(function (item) { return item.id === prodId; });
       if (!p) return;
 
+      var isBest = isProductBestSeller(p);
+
       document.getElementById('productModalTitle').innerHTML = '<i class="fa-solid fa-pen" style="color: var(--primary);"></i> Edit Produk';
       document.getElementById('prodEditId').value = p.id;
       document.getElementById('prodName').value = p.nama;
@@ -3445,7 +3618,9 @@
       document.getElementById('prodCapitalPrice').value = p.hargaModal || 0;
       document.getElementById('prodPrice').value = p.harga;
       document.getElementById('prodStock').value = p.stok;
-      document.getElementById('prodStatus').value = p.status;
+      document.getElementById('prodStatus').value = p.status === "Habis" ? "Habis" : (isBest ? "Best Seller" : "Tersedia");
+      var checkBest = document.getElementById('prodIsBestSeller');
+      if (checkBest) checkBest.checked = isBest;
       document.getElementById('prodImage').value = p.gambar || "";
       document.getElementById('prodDesc').value = p.deskripsi || "";
       calculateLiveProfit();
@@ -3460,6 +3635,15 @@
       var hargaJual = Number(document.getElementById('prodPrice').value) || 0;
       var stok = Number(document.getElementById('prodStock').value) || 0;
       var status = document.getElementById('prodStatus').value;
+      var checkBest = document.getElementById('prodIsBestSeller');
+      var isBest = checkBest ? checkBest.checked : (status === "Best Seller");
+
+      if (isBest && status !== "Habis") {
+        status = "Best Seller";
+      } else if (!isBest && status === "Best Seller") {
+        status = "Tersedia";
+      }
+
       var gambar = document.getElementById('prodImage').value.trim();
       var deskripsi = document.getElementById('prodDesc').value.trim();
 
@@ -3471,6 +3655,7 @@
         hargaModal: hargaModal,
         stok: stok,
         status: status,
+        isBestSeller: isBest,
         gambar: gambar || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80",
         deskripsi: deskripsi
       };
