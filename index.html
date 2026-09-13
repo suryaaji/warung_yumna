@@ -2223,17 +2223,30 @@
       loadProducts();
 
       if (adminToken) {
+        loadOrdersAdmin();
         checkPendingOrdersBadge();
       }
 
+      // Polling sinkronisasi stok, Best Seller & Banner realtime untuk semua pengunjung (pembeli & admin) setiap 10 detik
       setInterval(function () {
+        loadProducts();
         if (adminToken) {
           checkPendingOrdersBadge();
           if (currentView === "admin") {
             loadOrdersAdmin(true);
           }
         }
-      }, 25000);
+      }, 10000);
+
+      // Sinkronisasi instan saat pembeli/admin membuka kembali layar browser / HP
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') {
+          loadProducts(true);
+          if (adminToken) {
+            loadOrdersAdmin(true);
+          }
+        }
+      });
     });
 
     // ============================================================
@@ -2432,7 +2445,19 @@
       saveBannerConfig(newConfig);
       renderEventBanner();
       closeModal('bannerSettingModal');
-      showToast(isEnabled ? "✅ Banner Event AKTIF & berhasil disimpan!" : "⚪ Banner Event di-NONAKTIFKAN!");
+      showToast("Menyimpan status banner ke server...");
+
+      callBackendPost({
+        action: "saveBannerConfig",
+        bannerConfig: newConfig,
+        password: adminToken
+      }, function(res) {
+        if (res && res.success) {
+          showToast(isEnabled ? "✅ Banner Event AKTIF di semua perangkat!" : "⚪ Banner Event NONAKTIF di semua perangkat!");
+        } else {
+          showToast("⚠️ " + (res ? res.message : "Gagal menyimpan banner ke server"));
+        }
+      });
     }
 
     function resetBannerToDefault() {
@@ -2440,7 +2465,13 @@
         saveBannerConfig(DEFAULT_BANNER_CONFIG);
         openBannerSettingModal();
         renderEventBanner();
-        showToast("🔄 Pengaturan banner dikembalikan ke bawaan.");
+        callBackendPost({
+          action: "saveBannerConfig",
+          bannerConfig: DEFAULT_BANNER_CONFIG,
+          password: adminToken
+        }, function() {
+          showToast("🔄 Pengaturan banner dikembalikan ke bawaan di server.");
+        });
       }
     }
 
@@ -2519,10 +2550,17 @@
         }
       }
 
-      fetch(APPS_SCRIPT_URL + query)
-        .then(function (res) { return res.json(); })
+      var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 15000) : null;
+
+      fetch(APPS_SCRIPT_URL + query, { signal: controller ? controller.signal : undefined })
+        .then(function (res) { 
+          if (timeoutId) clearTimeout(timeoutId);
+          return res.json(); 
+        })
         .then(function (data) { callback(data); })
         .catch(function (err) {
+          if (timeoutId) clearTimeout(timeoutId);
           console.error("API GET Error:", err);
           callback({ success: false, error: err });
         });
@@ -2540,6 +2578,8 @@
           google.script.run.withSuccessHandler(callback).updateOrderStatus(payload.orderId, payload.newStatus, payload.password);
         } else if (payload.action === "saveProduct") {
           google.script.run.withSuccessHandler(callback).saveProduct(payload.product, payload.password);
+        } else if (payload.action === "saveBannerConfig") {
+          google.script.run.withSuccessHandler(callback).saveBannerConfig(payload.bannerConfig, payload.password);
         } else if (payload.action === "deleteProduct") {
           google.script.run.withSuccessHandler(callback).deleteProduct(payload.productId, payload.password);
         } else if (payload.action === "clearSheetData") {
@@ -2600,6 +2640,12 @@
       }
       if (config.NOMOR_WHATSAPP) {
         adminWaNumber = config.NOMOR_WHATSAPP;
+      }
+      if (config.BANNER) {
+        try {
+          localStorage.setItem('warung_event_banner', JSON.stringify(config.BANNER));
+        } catch (e) {}
+        renderEventBanner();
       }
     }
 
@@ -3197,29 +3243,69 @@
     }
 
     function refreshAdminData() {
-      try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
+      try { 
+        localStorage.removeItem('warung_products_cache'); 
+        localStorage.removeItem('warung_orders_cache');
+      } catch(e) {}
       loadProducts(true);
-      loadOrdersAdmin();
+      loadOrdersAdmin(true);
       if (currentAdminTab === 'stock') renderAdminStock();
       if (currentAdminTab === 'finance') renderFinancialReport();
       showToast("Data diperbarui dari server!");
     }
 
     // ============================================================
-    // ADMIN: PESANAN
+    // ADMIN: PESANAN (INSTANT CACHE & BACKGROUND SYNC)
     // ============================================================
-    function loadOrdersAdmin(isPolling) {
+    function loadOrdersAdmin(forceRefresh) {
       if (!adminToken) return;
 
+      // 1. Tampilkan Instan dari Cache (0 ms langsung tampil tanpa loading)
+      var hasCached = false;
+      if (!forceRefresh) {
+        try {
+          var rawCache = localStorage.getItem('warung_orders_cache');
+          if (rawCache) {
+            var parsed = JSON.parse(rawCache);
+            if (parsed && Array.isArray(parsed.orders)) {
+              allOrders = parsed.orders;
+              updateOrderBadges();
+              if (currentView === "admin") {
+                if (currentAdminTab === 'orders') filterAdminOrders();
+                else if (currentAdminTab === 'finance') renderFinancialReport();
+              }
+              hasCached = true;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 2. Ambil data realtime terbaru dari Google Spreadsheet di latar belakang
       callBackendGet("getOrders", { password: adminToken }, function (res) {
-        if (res && res.success) {
-          allOrders = res.orders || [];
+        if (res && res.success && Array.isArray(res.orders)) {
+          allOrders = res.orders;
+          try {
+            localStorage.setItem('warung_orders_cache', JSON.stringify({
+              orders: allOrders,
+              timestamp: Date.now()
+            }));
+          } catch (e) {}
           updateOrderBadges();
-          if (!isPolling || currentView === "admin") {
+          if (currentView === "admin") {
             if (currentAdminTab === 'orders') {
               filterAdminOrders();
             } else if (currentAdminTab === 'finance') {
               renderFinancialReport();
+            }
+          }
+        } else {
+          // Tangani jika terjadi error atau data kosong agar tidak stuck di loading
+          if (res && res.message && res.message.indexOf("Akses ditolak") !== -1) {
+            showToast("Password admin tidak sesuai.");
+          }
+          if (currentView === "admin" && currentAdminTab === 'orders') {
+            if (!allOrders || allOrders.length === 0) {
+              filterAdminOrders();
             }
           }
         }
@@ -3229,8 +3315,14 @@
     function checkPendingOrdersBadge() {
       if (!adminToken) return;
       callBackendGet("getOrders", { password: adminToken }, function (res) {
-        if (res && res.success && res.orders) {
+        if (res && res.success && Array.isArray(res.orders)) {
           allOrders = res.orders;
+          try {
+            localStorage.setItem('warung_orders_cache', JSON.stringify({
+              orders: allOrders,
+              timestamp: Date.now()
+            }));
+          } catch (e) {}
           updateOrderBadges();
         }
       });
