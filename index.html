@@ -2567,24 +2567,24 @@
     // ============================================================
     var INITIAL_PRODUCTS_DATA = [
       { id: "P-002", nama: "Minyak sunco", kategori: "Minyak", harga: 42000, hargaModal: 38000, stok: 37, status: "Best Seller", isBestSeller: true, gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHnxpViAsepTSB22YtumorXqwLA8VgeSLfWdjTDhJCzoT6JkmDIBJNJDU&s=10", deskripsi: "Minyak berkualitas" },
-      { id: "P-003", nama: "Gula rosebrand", kategori: "Gula", harga: 17500, hargaModal: 16000, stok: 40, status: "Best Seller", isBestSeller: true, gambar: "https://titanproduct.s3-ap-southeast-1.amazonaws.com/watermarkimg/8993093665497.jpg", deskripsi: "Gula premium" },
-      { id: "P-003-kecapbango95", nama: "Kecap Bango 950 ml", kategori: "Sembako", harga: 25000, hargaModal: 19000, stok: 4, status: "Best Seller", isBestSeller: true, gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/101/MTA-181588322/bango_bango_950g_kecap_manis_950_gram_full01_1a212e65.jpg", deskripsi: "Kecap manis" },
-      { id: "P-004", nama: "Mama lemon 950", kategori: "Sabun cuci piring", harga: 12000, hargaModal: 10000, stok: 5, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/id-11134207-8224t-mi3gxe9f2ebmb1", deskripsi: "" },
-      { id: "P-005", nama: "Pepsodent", kategori: "Pasta gigi", harga: 21000, hargaModal: 19000, stok: 6, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXm4Pa7q04yUrEylJ5JwfMy4Di9NGLk8K9HBulXw7jP5FBKuhVUbllrGw&s=10", deskripsi: "" },
-      { id: "P-006-sabunnuvo8", nama: "Sabun nuvo 800ml", kategori: "Sabun cair", harga: 22000, hargaModal: 19000, stok: 2, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOgvhnsE4fJlvmci7DY3ZxfFqx8WE_riw-zNx2wHd-Q3DUANatKn2B4E&s=10", deskripsi: "" },
-      { id: "P-007-sabungivca", nama: "Sabun giv cair 800 ml rasberry", kategori: "Cair", harga: 22000, hargaModal: 19000, stok: 1, status: "Tersedia", gambar: "https://medias.watsons.co.id/publishing/WTCID-36564-side-zoom.jpg?version=1767886867", deskripsi: "" },
-      { id: "P-008-lifbouycai", nama: "Lifbouy cair Japanese 720 ml", kategori: "Sabun cair", harga: 24000, hargaModal: 17500, stok: 4, status: "Tersedia", gambar: "https://assets.unileversolutions.com/v1/141890063.png", deskripsi: "" },
-      { id: "P-009-minyaktelo", nama: "Minyak telon my baby", kategori: "Skincare bayi", harga: 27000, hargaModal: 24000, stok: 3, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR97wNOnhyPR2nl8qqMHbVICA9D0Rxpw4vvhwljp7d9i71TUghTxOxvwpE&s=10", deskripsi: "" },
-      { id: "P-010-ciptadentm", nama: "Ciptadent mint 225gram", kategori: "Sembako", harga: 11000, hargaModal: 9000, stok: 2, status: "Tersedia", gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/MTA-106004781/ciptadent_ciptadent_pasta_gigi_225gr_full02_1bff835b.jpg", deskripsi: "" },
-      { id: "P-011-pepsodentc", nama: "Pepsodent comple whitening 150 gr", kategori: "Sembako", harga: 12000, hargaModal: 10000, stok: 1, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/id-11134207-7r98y-lttn8w83l20o9b", deskripsi: "" },
-      { id: "P-012-soklinpemb", nama: "Soklin pembersih lantai jeruk 720 ml", kategori: "Sembako", harga: 8000, hargaModal: 5000, stok: 2, status: "Tersedia", gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-56171566/soklin_so_klin_pembersih_lantai_clean_-_protect_citrus_garden_pouch_-700_ml-_full01_pewnyi04.jpg", deskripsi: "" },
-      { id: "P-013-kecapasinb", nama: "Kecap asin Bango asin 132 ml", kategori: "Sembako", harga: 7000, hargaModal: 6000, stok: 1, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/id-11134207-822wi-mmpvhzh53ldwa4", deskripsi: "" },
-      { id: "P-014-minyaktelo", nama: "Minyak telon mybaby 30 ml", kategori: "Skincare bayi", harga: 10000, hargaModal: 8000, stok: 1, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/id-11134207-7qul8-lft53dtgdrsr68", deskripsi: "" },
-      { id: "P-015-ekomoninan", nama: "Ekomoni nanas 920 gram", kategori: "Sabun cuci piring", harga: 13000, hargaModal: 10000, stok: 2, status: "Tersedia", gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/108/MTA-184658625/ekonomi_ekonomi_pencuci_piring_nanas_-_jeruk_nipis_pouch_920_gr_full04_jqhod4q4.webp", deskripsi: "" },
-      { id: "P-016-beraslahap", nama: "Beras lahap lele", kategori: "Sembako", harga: 72000, hargaModal: 63000, stok: 0, status: "Habis", gambar: "https://down-id.img.susercontent.com/file/id-11134207-8224q-mj9x8x4zlmgzc4", deskripsi: "" },
-      { id: "P-017-sunlight91", nama: "Sunlight 910ml", kategori: "Sembako", harga: 13000, hargaModal: 11500, stok: 2, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/sg-11134201-23010-spc4r8uvjgmv5e", deskripsi: "" },
-      { id: "P-018-santankara", nama: "Santan kara 65ml", kategori: "Bumbu", harga: 5000, hargaModal: 2100, stok: 65, status: "Tersedia", gambar: "https://down-id.img.susercontent.com/file/e2cfb991f3f86ac1cf60088743476d10", deskripsi: "Santan kara ya masih po ya teman2" },
-      { id: "P-019-kresekhita", nama: "Kresek hitam", kategori: "Sembako", harga: 1000, hargaModal: 2000, stok: 30, status: "Tersedia", gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzb2hmfo-jm2irR389AKI8c0OyfappWTdOW0hgCdA8Ig&s=10", deskripsi: "Untuk pengeluaran toko Yumna kresek tidak untuk di chekout" }
+      { id: "P-003", nama: "Gula rosebrand", kategori: "Gula", harga: 17500, hargaModal: 16000, stok: 40, status: "Tersedia", isBestSeller: false, gambar: "https://titanproduct.s3-ap-southeast-1.amazonaws.com/watermarkimg/8993093665497.jpg", deskripsi: "Gula premium" },
+      { id: "P-003-kecapbango95", nama: "Kecap Bango 950 ml", kategori: "Sembako", harga: 25000, hargaModal: 19000, stok: 4, status: "Tersedia", isBestSeller: false, gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/101/MTA-181588322/bango_bango_950g_kecap_manis_950_gram_full01_1a212e65.jpg", deskripsi: "Kecap manis" },
+      { id: "P-004", nama: "Mama lemon 950", kategori: "Sabun cuci piring", harga: 12000, hargaModal: 10000, stok: 5, status: "Tersedia", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/id-11134207-8224t-mi3gxe9f2ebmb1", deskripsi: "" },
+      { id: "P-005", nama: "Pepsodent", kategori: "Pasta gigi", harga: 21000, hargaModal: 19000, stok: 6, status: "Tersedia", isBestSeller: false, gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXm4Pa7q04yUrEylJ5JwfMy4Di9NGLk8K9HBulXw7jP5FBKuhVUbllrGw&s=10", deskripsi: "" },
+      { id: "P-006-sabunnuvo8", nama: "Sabun nuvo 800ml", kategori: "Sabun cair", harga: 22000, hargaModal: 19000, stok: 2, status: "Tersedia", isBestSeller: false, gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOgvhnsE4fJlvmci7DY3ZxfFqx8WE_riw-zNx2wHd-Q3DUANatKn2B4E&s=10", deskripsi: "" },
+      { id: "P-007-sabungivca", nama: "Sabun giv cair 800 ml rasberry", kategori: "Cair", harga: 22000, hargaModal: 19000, stok: 1, status: "Tersedia", isBestSeller: false, gambar: "https://medias.watsons.co.id/publishing/WTCID-36564-side-zoom.jpg?version=1767886867", deskripsi: "" },
+      { id: "P-008-lifbouycai", nama: "Lifbouy cair Japanese 720 ml", kategori: "Sabun cair", harga: 24000, hargaModal: 17500, stok: 4, status: "Tersedia", isBestSeller: false, gambar: "https://assets.unileversolutions.com/v1/141890063.png", deskripsi: "" },
+      { id: "P-009-minyaktelo", nama: "Minyak telon my baby", kategori: "Skincare bayi", harga: 27000, hargaModal: 24000, stok: 3, status: "Tersedia", isBestSeller: false, gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR97wNOnhyPR2nl8qqMHbVICA9D0Rxpw4vvhwljp7d9i71TUghTxOxvwpE&s=10", deskripsi: "" },
+      { id: "P-010-ciptadentm", nama: "Ciptadent mint 225gram", kategori: "Sembako", harga: 11000, hargaModal: 9000, stok: 2, status: "Tersedia", isBestSeller: false, gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/MTA-106004781/ciptadent_ciptadent_pasta_gigi_225gr_full02_1bff835b.jpg", deskripsi: "" },
+      { id: "P-011-pepsodentc", nama: "Pepsodent comple whitening 150 gr", kategori: "Sembako", harga: 12000, hargaModal: 10000, stok: 1, status: "Tersedia", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/id-11134207-7r98y-lttn8w83l20o9b", deskripsi: "" },
+      { id: "P-012-soklinpemb", nama: "Soklin pembersih lantai jeruk 720 ml", kategori: "Sembako", harga: 8000, hargaModal: 5000, stok: 2, status: "Tersedia", isBestSeller: false, gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-56171566/soklin_so_klin_pembersih_lantai_clean_-_protect_citrus_garden_pouch_-700_ml-_full01_pewnyi04.jpg", deskripsi: "" },
+      { id: "P-013-kecapasinb", nama: "Kecap asin Bango asin 132 ml", kategori: "Sembako", harga: 7000, hargaModal: 6000, stok: 1, status: "Tersedia", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/id-11134207-822wi-mmpvhzh53ldwa4", deskripsi: "" },
+      { id: "P-014-minyaktelo", nama: "Minyak telon mybaby 30 ml", kategori: "Skincare bayi", harga: 10000, hargaModal: 8000, stok: 1, status: "Tersedia", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/id-11134207-7qul8-lft53dtgdrsr68", deskripsi: "" },
+      { id: "P-015-ekomoninan", nama: "Ekomoni nanas 920 gram", kategori: "Sabun cuci piring", harga: 13000, hargaModal: 10000, stok: 2, status: "Tersedia", isBestSeller: false, gambar: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/108/MTA-184658625/ekonomi_ekonomi_pencuci_piring_nanas_-_jeruk_nipis_pouch_920_gr_full04_jqhod4q4.webp", deskripsi: "" },
+      { id: "P-016-beraslahap", nama: "Beras lahap lele", kategori: "Sembako", harga: 72000, hargaModal: 63000, stok: 0, status: "Habis", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/id-11134207-8224q-mj9x8x4zlmgzc4", deskripsi: "" },
+      { id: "P-017-sunlight91", nama: "Sunlight 910ml", kategori: "Sembako", harga: 13000, hargaModal: 11500, stok: 2, status: "Tersedia", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/sg-11134201-23010-spc4r8uvjgmv5e", deskripsi: "" },
+      { id: "P-018-santankara", nama: "Santan kara 65ml", kategori: "Bumbu", harga: 5000, hargaModal: 2100, stok: 65, status: "Tersedia", isBestSeller: false, gambar: "https://down-id.img.susercontent.com/file/e2cfb991f3f86ac1cf60088743476d10", deskripsi: "Santan kara ya masih po ya teman2" },
+      { id: "P-019-kresekhita", nama: "Kresek hitam", kategori: "Sembako", harga: 1000, hargaModal: 2000, stok: 30, status: "Tersedia", isBestSeller: false, gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzb2hmfo-jm2irR389AKI8c0OyfappWTdOW0hgCdA8Ig&s=10", deskripsi: "Untuk pengeluaran toko Yumna kresek tidak untuk di chekout" }
     ];
 
     function applyStoreConfig(config) {
@@ -2675,12 +2675,9 @@
       return salesMap;
     }
 
-    function isProductBestSeller(p, salesStats) {
+    function isProductBestSeller(p) {
       if (!p) return false;
-      var stats = salesStats || getProductSalesStats();
-      if (p.isBestSeller === true || p.isBestSeller === 'true' || p.status === 'Best Seller') return true;
-      if (stats[p.id] && stats[p.id] > 0) return true;
-      return false;
+      return (p.isBestSeller === true || p.isBestSeller === 'true' || p.status === 'Best Seller');
     }
 
     function renderProducts(products) {
@@ -2787,23 +2784,23 @@
         return;
       }
 
-      // 🔥 URUTKAN PRODUK: Best Seller tampil di paling atas!
+      // 🔥 URUTKAN PRODUK: Best Seller aktif tampil di paling atas!
       var salesStats = getProductSalesStats();
       filtered.sort(function (a, b) {
-        var aIsBest = isProductBestSeller(a, salesStats);
-        var bIsBest = isProductBestSeller(b, salesStats);
-        var aSales = (salesStats[a.id] || 0);
-        var bSales = (salesStats[b.id] || 0);
+        var aIsBest = isProductBestSeller(a);
+        var bIsBest = isProductBestSeller(b);
 
-        var aScore = (a.isBestSeller === true || a.isBestSeller === 'true' || a.status === 'Best Seller' ? 1000 : 0) + aSales;
-        var bScore = (b.isBestSeller === true || b.isBestSeller === 'true' || b.status === 'Best Seller' ? 1000 : 0) + bSales;
+        if (aIsBest !== bIsBest) return aIsBest ? -1 : 1;
 
         // Stok habis diletakkan di paling bawah
         var aOut = (a.stok <= 0 || a.status === "Habis");
         var bOut = (b.stok <= 0 || b.status === "Habis");
         if (aOut !== bOut) return aOut ? 1 : -1;
 
-        if (aScore !== bScore) return bScore - aScore;
+        var aSales = (salesStats[a.id] || 0);
+        var bSales = (salesStats[b.id] || 0);
+        if (aSales !== bSales) return bSales - aSales;
+
         return 0;
       });
 
@@ -2811,7 +2808,7 @@
       container.innerHTML = filtered.map(function (p) {
         var inCart = cart[p.id];
         var isOutOfStock = p.stok <= 0 || p.status === "Habis";
-        var isBest = isProductBestSeller(p, salesStats);
+        var isBest = isProductBestSeller(p);
 
         // Validasi ketat jika stok berubah
         if (inCart) {
@@ -3446,22 +3443,22 @@
 
       var salesStats = getProductSalesStats();
 
-      // 🔥 URUTKAN PRODUK ADMIN: Best Seller & Penjualan Tertinggi Tampil Paling Atas!
+      // 🔥 URUTKAN PRODUK ADMIN: Best Seller aktif tampil di paling atas!
       var sortedAdminProducts = allProducts.slice().sort(function(a, b) {
-        var aIsBest = isProductBestSeller(a, salesStats);
-        var bIsBest = isProductBestSeller(b, salesStats);
-        var aSales = (salesStats[a.id] || 0);
-        var bSales = (salesStats[b.id] || 0);
+        var aIsBest = isProductBestSeller(a);
+        var bIsBest = isProductBestSeller(b);
 
-        var aScore = (a.isBestSeller === true || a.isBestSeller === 'true' || a.status === 'Best Seller' ? 1000 : 0) + aSales;
-        var bScore = (b.isBestSeller === true || b.isBestSeller === 'true' || b.status === 'Best Seller' ? 1000 : 0) + bSales;
+        if (aIsBest !== bIsBest) return aIsBest ? -1 : 1;
 
         // Stok habis diletakkan di paling bawah
         var aOut = (a.stok <= 0 || a.status === "Habis");
         var bOut = (b.stok <= 0 || b.status === "Habis");
         if (aOut !== bOut) return aOut ? 1 : -1;
 
-        if (aScore !== bScore) return bScore - aScore;
+        var aSales = (salesStats[a.id] || 0);
+        var bSales = (salesStats[b.id] || 0);
+        if (aSales !== bSales) return bSales - aSales;
+
         return 0;
       });
 
@@ -3470,11 +3467,11 @@
         var modal = Number(p.hargaModal) || 0;
         var untung = jual - modal;
         var percent = modal > 0 ? Math.round((untung / modal) * 100) : 0;
-        var isBest = isProductBestSeller(p, salesStats);
+        var isBest = isProductBestSeller(p);
         var soldCount = salesStats[p.id] || 0;
         var bestBadgeHtml = isBest 
           ? `<span class="badge-best-seller-admin"><i class="fa-solid fa-fire"></i> Best Seller ${soldCount > 0 ? '(' + soldCount + ' Terjual)' : ''}</span>`
-          : '';
+          : (soldCount > 0 ? `<span style="font-size: 11px; color: var(--gray-600); font-weight: 600;">(${soldCount} Terjual)</span>` : '');
         var cardClass = isBest ? 'stock-card best-seller-card' : 'stock-card';
 
         return `
@@ -3498,7 +3495,7 @@
             </div>
 
             <div class="stock-controls">
-              <button type="button" class="btn-act ${isBest ? 'btn-act-done' : 'btn-act-edit'}" onclick="toggleProductBestSeller('${p.id}')" title="Klik untuk mengaktifkan / menonaktifkan status Best Seller" style="font-size: 11px; padding: 5px 8px;">
+              <button type="button" class="btn-act ${isBest ? 'btn-act-done' : 'btn-act-edit'}" onclick="toggleProductBestSeller('${p.id}')" title="Klik untuk ON/OFF status Best Seller produk ini saja" style="font-size: 11px; padding: 5px 8px;">
                 <i class="fa-solid fa-fire"></i> ${isBest ? 'Best Seller: ON' : 'Best Seller: OFF'}
               </button>
 
@@ -3519,7 +3516,7 @@
     }
 
     function toggleProductBestSeller(prodId) {
-      var p = allProducts.find(function (item) { return item.id === prodId; });
+      var p = allProducts.find(function (item) { return String(item.id) === String(prodId); });
       if (!p) return;
 
       var currentlyBest = isProductBestSeller(p);
@@ -3532,7 +3529,20 @@
         if (p.status === "Best Seller") p.status = "Tersedia";
       }
 
-      showToast("Mengubah status " + p.nama + " -> " + (newBestState ? "🔥 BEST SELLER" : "Biasa") + "...");
+      showToast("Mengubah status " + p.nama + " -> " + (newBestState ? "🔥 BEST SELLER: ON" : "⚪ BEST SELLER: OFF") + "...");
+
+      // Update tampilan langsung
+      renderAdminStock();
+      filterAndDisplay();
+
+      // Perbarui cache
+      try {
+        localStorage.setItem('warung_products_cache', JSON.stringify({
+          products: allProducts,
+          config: { NAMA_TOKO: storeName, NOMOR_WHATSAPP: adminWaNumber },
+          timestamp: Date.now()
+        }));
+      } catch (e) {}
 
       callBackendPost({
         action: "saveProduct",
@@ -3541,10 +3551,8 @@
       }, function (res) {
         if (res && res.success) {
           showToast(p.nama + (newBestState ? " aktif sebagai Best Seller 🔥" : " Best Seller dinonaktifkan"));
-          try { localStorage.removeItem('warung_products_cache'); } catch(e) {}
-          loadProducts(true);
         } else {
-          alert(res ? res.message : "Gagal mengubah status Best Seller");
+          alert(res ? res.message : "Gagal menyimpan status ke server");
         }
       });
     }
