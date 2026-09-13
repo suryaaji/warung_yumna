@@ -3170,7 +3170,7 @@
 
       var btnCheckout = document.getElementById('btnCheckout');
       btnCheckout.disabled = true;
-      btnCheckout.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyiapkan Pesanan...';
+      btnCheckout.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Membuka WhatsApp...';
 
       var totalPrice = items.reduce(function (acc, item) { return acc + (item.qty * item.harga); }, 0);
 
@@ -3217,9 +3217,15 @@
         }
       };
 
+      // Simpan pesanan ke database spreadsheet di latar belakang (tanpa menahan pembeli)
       callBackendPost(orderPayload, function (res) {
-        finishCheckout(waMessage);
+        console.log("Pesanan tersimpan di Spreadsheet:", res);
       });
+
+      // Buka WhatsApp seketika (Instant 0ms) agar responsif dan tidak terhambat loading / popup blocker
+      setTimeout(function() {
+        finishCheckout(waMessage);
+      }, 50);
     }
 
     function finishCheckout(waMessage) {
@@ -3227,11 +3233,20 @@
       var cleanWa = formatNomorWA(adminWaNumber);
       var waUrl = "https://wa.me/" + cleanWa + "?text=" + encodedMsg;
 
-      window.open(waUrl, '_blank');
+      try {
+        var win = window.open(waUrl, '_blank');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
+      } catch (e) {
+        window.location.href = waUrl;
+      }
 
       var btnCheckout = document.getElementById('btnCheckout');
-      btnCheckout.disabled = false;
-      btnCheckout.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> <span>Pesan via WhatsApp</span>';
+      if (btnCheckout) {
+        btnCheckout.disabled = false;
+        btnCheckout.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> <span>Pesan via WhatsApp</span>';
+      }
 
       cart = {};
       updateUI();
@@ -3547,11 +3562,26 @@
     }
 
     function updateOrderStatus(orderId, newStatus) {
+      if (!adminToken) {
+        showToast("⚠️ Silakan login Admin terlebih dahulu!");
+        openModal('loginModal');
+        return;
+      }
+
       if (!confirm("Ubah status pesanan " + orderId + " menjadi '" + newStatus + "'?" + (newStatus === 'Diterima' ? '\n(Stok produk otomatis akan dipotong)' : ''))) {
         return;
       }
 
-      showToast("Mengupdate status pesanan...");
+      // 1. Optimistic Update Instan di UI (0ms)
+      var targetOrder = allOrders.find(function(o) { return String(o.orderId) === String(orderId); });
+      var prevStatus = targetOrder ? targetOrder.status : "Menunggu Konfirmasi";
+      if (targetOrder) {
+        targetOrder.status = newStatus;
+        updateOrderBadges();
+        filterAdminOrders();
+      }
+
+      showToast("Mengupdate status pesanan " + orderId + " -> " + newStatus + "...");
 
       callBackendPost({
         action: "updateOrderStatus",
@@ -3560,10 +3590,20 @@
         password: adminToken
       }, function (res) {
         if (res && res.success) {
-          showToast(res.message || "Status pesanan diperbarui");
-          loadProducts();
-          loadOrdersAdmin();
+          showToast(res.message || "Status pesanan berhasil diperbarui!");
+          try { 
+            localStorage.removeItem('warung_products_cache'); 
+            localStorage.removeItem('warung_orders_cache'); 
+          } catch(e) {}
+          loadProducts(true);
+          loadOrdersAdmin(true);
         } else {
+          // Rollback jika gagal
+          if (targetOrder) {
+            targetOrder.status = prevStatus;
+            updateOrderBadges();
+            filterAdminOrders();
+          }
           var errMsg = getErrorMessage(res, "Gagal mengupdate status pesanan");
           showToast("⚠️ " + errMsg);
         }
