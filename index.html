@@ -2622,7 +2622,7 @@
         return;
       }
 
-      var query = "?action=" + encodeURIComponent(action);
+      var query = "?action=" + encodeURIComponent(action) + "&_t=" + Date.now() + "_" + Math.floor(Math.random() * 10000);
       if (params) {
         for (var k in params) {
           query += "&" + encodeURIComponent(k) + "=" + encodeURIComponent(params[k]);
