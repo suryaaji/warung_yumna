@@ -4210,7 +4210,8 @@
         var orderProfit = orderOmset - orderModal;
         var profitPercent = orderOmset > 0 ? Math.round((orderProfit / orderOmset) * 100) : 0;
 
-        if (o.status !== 'Ditolak') {
+        var isAcceptedOrDone = (o.status === 'Diterima' || o.status === 'Selesai' || o.status === 'Diproses');
+        if (isAcceptedOrDone) {
           totalOmset += orderOmset;
           totalModal += orderModal;
           totalItemsCount += orderItemsCount;
@@ -4337,8 +4338,8 @@
           });
         }
 
-        var orderProfit = orderOmset - orderModal;
-        if (o.status !== 'Ditolak') {
+        var isAcceptedOrDone = (o.status === 'Diterima' || o.status === 'Selesai' || o.status === 'Diproses');
+        if (isAcceptedOrDone) {
           totalOmset += orderOmset;
           totalModal += orderModal;
           totalItemsCount += orderItemsCount;
