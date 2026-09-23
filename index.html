@@ -2629,22 +2629,17 @@
         }
       }
 
-      var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-      var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 15000) : null;
-
       fetch(APPS_SCRIPT_URL + query, { 
-        signal: controller ? controller.signal : undefined,
+        method: "GET",
         cache: "no-store"
       })
         .then(function (res) { 
-          if (timeoutId) clearTimeout(timeoutId);
           return res.json(); 
         })
         .then(function (data) { callback(data); })
         .catch(function (err) {
-          if (timeoutId) clearTimeout(timeoutId);
           console.error("API GET Error:", err);
-          callback({ success: false, error: err });
+          callback({ success: false, error: err, message: "Koneksi ke server lambat atau terputus. Silakan coba beberapa saat lagi." });
         });
     }
 
@@ -2652,8 +2647,14 @@
       if (!res) return defaultMsg || "Terjadi kesalahan koneksi";
       if (res.message) return String(res.message);
       if (res.error) {
-        if (typeof res.error === 'string') return res.error;
-        if (res.error.message) return String(res.error.message);
+        if (typeof res.error === 'string') {
+          if (res.error.indexOf("aborted") !== -1) return "Koneksi ke server timeout/terputus. Silakan coba lagi.";
+          return res.error;
+        }
+        if (res.error.message) {
+          if (String(res.error.message).indexOf("aborted") !== -1) return "Koneksi ke server timeout/terputus. Silakan coba lagi.";
+          return String(res.error.message);
+        }
       }
       return defaultMsg || "Gagal memproses permintaan";
     }
